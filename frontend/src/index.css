@@ -2,29 +2,33 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Custom scrollbar for the chatbot */
-.custom-scrollbar::-webkit-scrollbar {
-  width: 6px;
+/* Meeting form inputs - dark background with white text */
+.meeting-form input,
+.meeting-form textarea,
+.meeting-form select,
+.meeting-form option {
+  color: white !important;
+  background-color: #1e293b !important; /* Dark blue background matching AI components */
+  caret-color: white !important;
+  border-color: #3b82f6 !important; /* Blue border for better visibility */
 }
 
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: rgba(30, 41, 59, 0.5);
-  border-radius: 10px;
+/* Custom scrollbar for chatbot */
+.chatbot-messages::-webkit-scrollbar {
+  width: 5px;
 }
 
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(99, 102, 241, 0.5);
-  border-radius: 10px;
+.chatbot-messages::-webkit-scrollbar-track {
+  background: #1e293b;
 }
 
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(99, 102, 241, 0.7);
+.chatbot-messages::-webkit-scrollbar-thumb {
+  background: #3b82f6;
+  border-radius: 5px;
 }
 
-/* For Firefox */
-.custom-scrollbar {
-  scrollbar-width: thin;
-  scrollbar-color: rgba(99, 102, 241, 0.5) rgba(30, 41, 59, 0.5);
+.chatbot-messages::-webkit-scrollbar-thumb:hover {
+  background: #2563eb;
 }
 
 /* Animation styles for feature guide */

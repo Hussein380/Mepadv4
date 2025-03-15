@@ -179,7 +179,7 @@ export default function MeetingForm({ onSubmit, initialData = {} }) {
 
                 <motion.form 
                     onSubmit={handleSubmit} 
-                    className="space-y-6 bg-white/10 backdrop-blur-lg rounded-xl p-6 shadow-xl"
+                    className="space-y-6 bg-white/10 backdrop-blur-lg rounded-xl p-6 shadow-xl meeting-form"
                 >
                     {/* Meeting Details */}
                     <div className="space-y-6">
@@ -193,10 +193,16 @@ export default function MeetingForm({ onSubmit, initialData = {} }) {
                                     type="text"
                                     value={formData.title}
                                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                                    className="w-full px-4 py-2 bg-blue-800/50 border border-blue-700 rounded-lg 
-                                             text-white placeholder-blue-300 focus:ring-2 focus:ring-blue-500 
+                                    className="w-full px-4 py-2 border border-blue-700 rounded-lg 
+                                             focus:ring-2 focus:ring-blue-500 
                                              focus:border-transparent transition-all"
                                     required
+                                    style={{
+                                        color: 'white',
+                                        backgroundColor: '#1e293b',
+                                        caretColor: 'white',
+                                        borderColor: '#3b82f6'
+                                    }}
                                 />
                             </motion.div>
                             <motion.div whileHover={{ scale: 1.01 }} className="space-y-2">
@@ -205,9 +211,15 @@ export default function MeetingForm({ onSubmit, initialData = {} }) {
                                     type="text"
                                     value={formData.venue}
                                     onChange={(e) => setFormData({ ...formData, venue: e.target.value })}
-                                    className="w-full px-4 py-2 bg-blue-800/50 border border-blue-700 rounded-lg 
-                                             text-white focus:ring-2 focus:ring-blue-500 transition-all"
+                                    className="w-full px-4 py-2 border border-blue-700 rounded-lg 
+                                             focus:ring-2 focus:ring-blue-500 transition-all"
                                     required
+                                    style={{
+                                        color: 'white',
+                                        backgroundColor: '#1e293b',
+                                        caretColor: 'white',
+                                        borderColor: '#3b82f6'
+                                    }}
                                 />
                             </motion.div>
                         </div>
@@ -219,9 +231,15 @@ export default function MeetingForm({ onSubmit, initialData = {} }) {
                                     type="date"
                                     value={formData.date}
                                     onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                                    className="w-full px-4 py-2 bg-blue-800/50 border border-blue-700 rounded-lg 
-                                             text-white focus:ring-2 focus:ring-blue-500 transition-all"
+                                    className="w-full px-4 py-2 border border-blue-700 rounded-lg 
+                                             focus:ring-2 focus:ring-blue-500 transition-all"
                                     required
+                                    style={{
+                                        color: 'white',
+                                        backgroundColor: '#1e293b',
+                                        caretColor: 'white',
+                                        borderColor: '#3b82f6'
+                                    }}
                                 />
                             </motion.div>
                             <motion.div whileHover={{ scale: 1.01 }} className="space-y-2">
@@ -229,12 +247,18 @@ export default function MeetingForm({ onSubmit, initialData = {} }) {
                                 <select
                                     value={formData.status}
                                     onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                                    className="w-full px-4 py-2 bg-blue-800/50 border border-blue-700 rounded-lg 
-                                             text-white focus:ring-2 focus:ring-blue-500 transition-all"
+                                    className="w-full px-4 py-2 border border-blue-700 rounded-lg 
+                                             focus:ring-2 focus:ring-blue-500 transition-all"
                                     required
+                                    style={{
+                                        color: 'white',
+                                        backgroundColor: '#1e293b',
+                                        caretColor: 'white',
+                                        borderColor: '#3b82f6'
+                                    }}
                                 >
-                                    <option value="upcoming">Upcoming</option>
-                                    <option value="completed">Completed</option>
+                                    <option value="upcoming" style={{ backgroundColor: '#1e293b' }}>Upcoming</option>
+                                    <option value="completed" style={{ backgroundColor: '#1e293b' }}>Completed</option>
                                 </select>
                             </motion.div>
                         </div>
@@ -244,10 +268,16 @@ export default function MeetingForm({ onSubmit, initialData = {} }) {
                             <textarea
                                 value={formData.summary}
                                 onChange={(e) => setFormData({ ...formData, summary: e.target.value })}
-                                className="w-full px-4 py-2 bg-blue-800/50 border border-blue-700 rounded-lg 
-                                         text-white placeholder-blue-300 focus:ring-2 focus:ring-blue-500 
+                                className="w-full px-4 py-2 border border-blue-700 rounded-lg 
+                                         placeholder-gray-500 focus:ring-2 focus:ring-blue-500 
                                          focus:border-transparent transition-all resize-y"
                                 required
+                                style={{
+                                    color: 'white',
+                                    backgroundColor: '#1e293b',
+                                    caretColor: 'white',
+                                    borderColor: '#3b82f6'
+                                }}
                             ></textarea>
                         </div>
                     </div>
@@ -275,13 +305,19 @@ export default function MeetingForm({ onSubmit, initialData = {} }) {
                         </div>
 
                         {showActionPointForm && (
-                            <div className="w-full flex flex-col gap-2 p-3 bg-gray-50 rounded-md">
+                            <div className="w-full flex flex-col gap-2 p-3 bg-slate-800 rounded-md">
                                 <input
                                     type="text"
                                     placeholder="Description"
                                     value={currentActionPoint.description}
                                     onChange={(e) => setCurrentActionPoint({ ...currentActionPoint, description: e.target.value })}
                                     className="w-full px-3 py-2 border rounded-md text-sm"
+                                    style={{
+                                        color: 'white',
+                                        backgroundColor: '#1e293b',
+                                        caretColor: 'white',
+                                        borderColor: '#3b82f6'
+                                    }}
                                 />
                                 <div className="flex flex-col sm:flex-row gap-2">
                                     <input
@@ -290,12 +326,24 @@ export default function MeetingForm({ onSubmit, initialData = {} }) {
                                         value={currentActionPoint.assignedTo}
                                         onChange={(e) => setCurrentActionPoint({ ...currentActionPoint, assignedTo: e.target.value })}
                                         className="w-full px-3 py-2 border rounded-md text-sm"
+                                        style={{
+                                            color: 'white',
+                                            backgroundColor: '#1e293b',
+                                            caretColor: 'white',
+                                            borderColor: '#3b82f6'
+                                        }}
                                     />
                                     <input
                                         type="date"
                                         value={currentActionPoint.dueDate}
                                         onChange={(e) => setCurrentActionPoint({ ...currentActionPoint, dueDate: e.target.value })}
                                         className="w-full px-3 py-2 border rounded-md text-sm"
+                                        style={{
+                                            color: 'white',
+                                            backgroundColor: '#1e293b',
+                                            caretColor: 'white',
+                                            borderColor: '#3b82f6'
+                                        }}
                                     />
                                 </div>
                                 <button
@@ -311,16 +359,16 @@ export default function MeetingForm({ onSubmit, initialData = {} }) {
                         {/* Display added action points */}
                         <div className="space-y-2">
                             {formData.actionPoints.map((point, index) => (
-                                <div key={point.id} className="flex justify-between items-start p-3 bg-gray-50 rounded-md">
+                                <div key={point.id} className="flex justify-between items-start p-3 bg-slate-800 rounded-md">
                                     <div>
-                                        <p className="font-medium">{point.description}</p>
-                                        <p className="text-sm text-gray-600">Assigned to: {point.assignedTo}</p>
-                                        <p className="text-sm text-gray-600">Due: {new Date(point.dueDate).toLocaleDateString()}</p>
+                                        <p className="font-medium text-white">{point.description}</p>
+                                        <p className="text-sm text-blue-200">Assigned to: {point.assignedTo}</p>
+                                        <p className="text-sm text-blue-200">Due: {new Date(point.dueDate).toLocaleDateString()}</p>
                                     </div>
                                     <button
                                         type="button"
                                         onClick={() => handleRemoveActionPoint(index)}
-                                        className="text-red-600 hover:text-red-700"
+                                        className="text-red-400 hover:text-red-300 bg-red-900/30 px-2 py-1 rounded"
                                     >
                                         Remove
                                     </button>
@@ -352,22 +400,34 @@ export default function MeetingForm({ onSubmit, initialData = {} }) {
                         </div>
 
                         {showPainPointForm && (
-                            <div className="w-full flex flex-col gap-2 p-3 bg-gray-50 rounded-md">
+                            <div className="w-full flex flex-col gap-2 p-3 bg-slate-800 rounded-md">
                                 <input
                                     type="text"
                                     placeholder="Description"
                                     value={currentPainPoint.description}
                                     onChange={(e) => setCurrentPainPoint({ ...currentPainPoint, description: e.target.value })}
                                     className="w-full px-3 py-2 border rounded-md text-sm"
+                                    style={{
+                                        color: 'white',
+                                        backgroundColor: '#1e293b',
+                                        caretColor: 'white',
+                                        borderColor: '#3b82f6'
+                                    }}
                                 />
                                 <select
                                     value={currentPainPoint.severity}
                                     onChange={(e) => setCurrentPainPoint({ ...currentPainPoint, severity: e.target.value })}
                                     className="w-full px-3 py-2 border rounded-md text-sm"
+                                    style={{
+                                        color: 'white',
+                                        backgroundColor: '#1e293b',
+                                        caretColor: 'white',
+                                        borderColor: '#3b82f6'
+                                    }}
                                 >
-                                    <option value="low">Low</option>
-                                    <option value="medium">Medium</option>
-                                    <option value="high">High</option>
+                                    <option value="low" style={{ backgroundColor: '#1e293b' }}>Low</option>
+                                    <option value="medium" style={{ backgroundColor: '#1e293b' }}>Medium</option>
+                                    <option value="high" style={{ backgroundColor: '#1e293b' }}>High</option>
                                 </select>
                                 <button
                                     type="button"
@@ -382,21 +442,21 @@ export default function MeetingForm({ onSubmit, initialData = {} }) {
                         {/* Display added pain points */}
                         <div className="space-y-2">
                             {formData.painPoints.map((point, index) => (
-                                <div key={point.id} className="flex justify-between items-start p-3 bg-gray-50 rounded-md">
+                                <div key={point.id} className="flex justify-between items-start p-3 bg-slate-800 rounded-md">
                                     <div>
-                                        <p className="font-medium">{point.description}</p>
-                                        <p className="text-sm text-gray-600">
+                                        <p className="font-medium text-white">{point.description}</p>
+                                        <p className="text-sm text-blue-200">
                                             Severity: <span className={`${
-                                                point.severity === 'high' ? 'text-red-600' :
-                                                point.severity === 'medium' ? 'text-yellow-600' :
-                                                'text-green-600'
+                                                point.severity === 'high' ? 'text-red-400' :
+                                                point.severity === 'medium' ? 'text-yellow-400' :
+                                                'text-green-400'
                                             }`}>{point.severity}</span>
                                         </p>
                                     </div>
                                     <button
                                         type="button"
                                         onClick={() => handleRemovePainPoint(index)}
-                                        className="text-red-600 hover:text-red-700"
+                                        className="text-red-400 hover:text-red-300 bg-red-900/30 px-2 py-1 rounded"
                                     >
                                         Remove
                                     </button>
@@ -428,13 +488,19 @@ export default function MeetingForm({ onSubmit, initialData = {} }) {
                         </div>
 
                         {showParticipantForm && (
-                            <div className="w-full flex flex-col gap-2 p-3 bg-gray-50 rounded-md">
+                            <div className="w-full flex flex-col gap-2 p-3 bg-slate-800 rounded-md">
                                 <input
                                     type="text"
                                     placeholder="Name"
                                     value={currentParticipant.name}
                                     onChange={(e) => setCurrentParticipant({ ...currentParticipant, name: e.target.value })}
                                     className="w-full px-3 py-2 border rounded-md text-sm"
+                                    style={{
+                                        color: 'white',
+                                        backgroundColor: '#1e293b',
+                                        caretColor: 'white',
+                                        borderColor: '#3b82f6'
+                                    }}
                                 />
                                 <input
                                     type="email"
@@ -442,6 +508,12 @@ export default function MeetingForm({ onSubmit, initialData = {} }) {
                                     value={currentParticipant.email}
                                     onChange={(e) => setCurrentParticipant({ ...currentParticipant, email: e.target.value })}
                                     className="w-full px-3 py-2 border rounded-md text-sm"
+                                    style={{
+                                        color: 'white',
+                                        backgroundColor: '#1e293b',
+                                        caretColor: 'white',
+                                        borderColor: '#3b82f6'
+                                    }}
                                 />
                                 <button
                                     type="button"
@@ -455,15 +527,15 @@ export default function MeetingForm({ onSubmit, initialData = {} }) {
 
                         <div className="space-y-2">
                             {formData.participants.map((participant, index) => (
-                                <div key={participant.id || index} className="flex justify-between items-center p-2 bg-gray-50 rounded-md">
+                                <div key={participant.id || index} className="flex justify-between items-center p-2 bg-slate-800 rounded-md">
                                     <div>
-                                        <p className="font-medium">{participant.name}</p>
-                                        <p className="text-sm text-gray-600">{participant.email}</p>
+                                        <p className="font-medium text-white">{participant.name}</p>
+                                        <p className="text-sm text-blue-200">{participant.email}</p>
                                     </div>
                                     <button
                                         type="button"
                                         onClick={() => handleRemoveParticipant(index)}
-                                        className="text-red-600 hover:text-red-700"
+                                        className="text-red-400 hover:text-red-300 bg-red-900/30 px-2 py-1 rounded"
                                     >
                                         Remove
                                     </button>

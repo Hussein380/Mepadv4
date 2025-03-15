@@ -66,165 +66,178 @@ export default function CreateMeeting() {
     };
 
     return (
-        <div className="max-w-3xl mx-auto p-4">
-            <h1 className="text-2xl font-bold mb-6">Create New Meeting</h1>
-            <form onSubmit={handleSubmit} className="space-y-6">
-                {/* Title */}
-                <div>
-                    <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">
-                        Meeting Title
-                    </label>
-                    <input
-                        type="text"
-                        id="title"
-                        name="title"
-                        value={formData.title}
-                        onChange={handleChange}
-                        required
-                        className="w-full px-3 py-2 border rounded-md"
-                        placeholder="Enter meeting title"
-                    />
-                </div>
-
-                {/* Date and Duration */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="min-h-screen bg-gradient-to-b from-blue-900 to-blue-950 py-8">
+            <div className="max-w-4xl mx-auto p-6">
+                <h1 className="text-2xl font-bold mb-6 text-white">Create New Meeting</h1>
+                <form onSubmit={handleSubmit} className="space-y-6 bg-white/10 backdrop-blur-lg rounded-xl p-6 shadow-xl">
+                    {/* Title */}
                     <div>
-                        <label htmlFor="date" className="block text-sm font-medium text-gray-700 mb-1">
-                            Date and Time
-                        </label>
+                        <label className="block text-sm font-medium mb-1 text-blue-100">Title</label>
                         <input
-                            type="datetime-local"
-                            id="date"
-                            name="date"
-                            value={formData.date}
+                            type="text"
+                            id="title"
+                            name="title"
+                            value={formData.title}
                             onChange={handleChange}
                             required
-                            className="w-full px-3 py-2 border rounded-md"
+                            className="w-full px-4 py-2 rounded-lg border border-blue-700"
+                            placeholder="Enter meeting title"
+                            style={{
+                                backgroundColor: '#1e293b',
+                                color: 'white',
+                                caretColor: 'white'
+                            }}
                         />
                     </div>
+
+                    {/* Date and Duration */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label className="block text-sm font-medium mb-1 text-blue-100">Date and Time</label>
+                            <input
+                                type="datetime-local"
+                                name="dateTime"
+                                value={formData.dateTime}
+                                onChange={handleChange}
+                                required
+                                className="w-full px-4 py-2 rounded-lg border border-blue-700"
+                                style={{
+                                    backgroundColor: '#1e293b',
+                                    color: 'white',
+                                    caretColor: 'white'
+                                }}
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium mb-1 text-blue-100">Duration (minutes)</label>
+                            <input
+                                type="number"
+                                name="duration"
+                                value={formData.duration}
+                                onChange={handleChange}
+                                required
+                                className="w-full px-4 py-2 rounded-lg border border-blue-700"
+                                style={{
+                                    backgroundColor: '#1e293b',
+                                    color: 'white',
+                                    caretColor: 'white'
+                                }}
+                            />
+                        </div>
+                    </div>
+
+                    {/* Venue */}
                     <div>
-                        <label htmlFor="duration" className="block text-sm font-medium text-gray-700 mb-1">
-                            Duration (minutes)
-                        </label>
+                        <label className="block text-sm font-medium mb-1 text-blue-100">Venue</label>
                         <input
-                            type="number"
-                            id="duration"
-                            name="duration"
-                            value={formData.duration}
+                            type="text"
+                            name="venue"
+                            value={formData.venue}
                             onChange={handleChange}
-                            min="15"
-                            step="15"
-                            className="w-full px-3 py-2 border rounded-md"
+                            required
+                            className="w-full px-4 py-2 rounded-lg border border-blue-700"
+                            placeholder="Enter meeting location"
+                            style={{
+                                backgroundColor: '#1e293b',
+                                color: 'white',
+                                caretColor: 'white'
+                            }}
                         />
                     </div>
-                </div>
 
-                {/* Venue */}
-                <div>
-                    <label htmlFor="venue" className="block text-sm font-medium text-gray-700 mb-1">
-                        Venue
-                    </label>
-                    <input
-                        type="text"
-                        id="venue"
-                        name="venue"
-                        value={formData.venue}
-                        onChange={handleChange}
-                        className="w-full px-3 py-2 border rounded-md"
-                        placeholder="Enter meeting location"
-                    />
-                </div>
-
-                {/* Summary */}
-                <div>
-                    <label htmlFor="summary" className="block text-sm font-medium text-gray-700 mb-1">
-                        Meeting Summary
-                    </label>
-                    <textarea
-                        id="summary"
-                        name="summary"
-                        value={formData.summary}
-                        onChange={handleChange}
-                        rows="4"
-                        className="w-full px-3 py-2 border rounded-md"
-                        placeholder="Enter meeting summary or agenda"
-                    ></textarea>
-                </div>
-
-                {/* Participants Section */}
-                <div className="space-y-4">
-                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                        <h3 className="text-lg font-semibold">Participants</h3>
-                        <button
-                            type="button"
-                            onClick={handleAddParticipant}
-                            className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 
-                                     transition-colors w-full sm:w-auto text-center whitespace-nowrap"
-                        >
-                            Add Participant
-                        </button>
+                    {/* Summary */}
+                    <div>
+                        <label className="block text-sm font-medium mb-1 text-blue-100">Meeting Summary</label>
+                        <textarea
+                            name="summary"
+                            value={formData.summary}
+                            onChange={handleChange}
+                            required
+                            rows="4"
+                            className="w-full px-4 py-2 rounded-lg border border-blue-700"
+                            placeholder="Enter meeting summary or agenda"
+                            style={{
+                                backgroundColor: '#1e293b',
+                                color: 'white',
+                                caretColor: 'white'
+                            }}
+                        ></textarea>
                     </div>
 
-                    {participants.map((participant, index) => (
-                        <div 
-                            key={index} 
-                            className="flex flex-col sm:flex-row items-start sm:items-center gap-3 p-3 bg-gray-50 rounded-md"
-                        >
-                            <div className="w-full sm:w-1/3">
-                                <input
-                                    type="text"
-                                    placeholder="Name"
-                                    value={participant.name}
-                                    onChange={(e) => handleParticipantChange(index, 'name', e.target.value)}
-                                    className="w-full px-3 py-2 border rounded-md"
-                                    required
-                                />
-                            </div>
-                            <div className="w-full sm:w-1/3">
-                                <input
-                                    type="email"
-                                    placeholder="Email"
-                                    value={participant.email}
-                                    onChange={(e) => handleParticipantChange(index, 'email', e.target.value)}
-                                    className="w-full px-3 py-2 border rounded-md"
-                                    required
-                                />
-                            </div>
-                            <div className="w-full sm:w-1/3">
-                                <select
-                                    value={participant.role}
-                                    onChange={(e) => handleParticipantChange(index, 'role', e.target.value)}
-                                    className="w-full px-3 py-2 border rounded-md"
-                                >
-                                    <option value="viewer">Viewer</option>
-                                    <option value="contributor">Contributor</option>
-                                </select>
-                            </div>
+                    {/* Participants Section */}
+                    <div className="space-y-4">
+                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                            <h3 className="text-lg font-semibold">Participants</h3>
                             <button
                                 type="button"
-                                onClick={() => handleRemoveParticipant(index)}
-                                className="text-red-600 hover:text-red-700 px-2 py-1 rounded-md 
-                                         hover:bg-red-50 transition-colors w-full sm:w-auto text-center"
+                                onClick={handleAddParticipant}
+                                className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 
+                                         transition-colors w-full sm:w-auto text-center whitespace-nowrap"
                             >
-                                Remove
+                                Add Participant
                             </button>
                         </div>
-                    ))}
-                </div>
 
-                {/* Submit Button */}
-                <div className="flex justify-end">
-                    <button
-                        type="submit"
-                        disabled={isSubmitting}
-                        className={`${
-                            isSubmitting ? 'bg-blue-400' : 'bg-blue-600 hover:bg-blue-700'
-                        } text-white px-6 py-2 rounded-md transition-colors w-full sm:w-auto text-center`}
-                    >
-                        {isSubmitting ? 'Creating...' : 'Create Meeting'}
-                    </button>
-                </div>
-            </form>
+                        {participants.map((participant, index) => (
+                            <div 
+                                key={index} 
+                                className="flex flex-col sm:flex-row items-start sm:items-center gap-3 p-3 bg-gray-50 rounded-md"
+                            >
+                                <div className="w-full sm:w-1/3">
+                                    <input
+                                        type="text"
+                                        placeholder="Name"
+                                        value={participant.name}
+                                        onChange={(e) => handleParticipantChange(index, 'name', e.target.value)}
+                                        className="w-full px-3 py-2 border rounded-md"
+                                        required
+                                    />
+                                </div>
+                                <div className="w-full sm:w-1/3">
+                                    <input
+                                        type="email"
+                                        placeholder="Email"
+                                        value={participant.email}
+                                        onChange={(e) => handleParticipantChange(index, 'email', e.target.value)}
+                                        className="w-full px-3 py-2 border rounded-md"
+                                        required
+                                    />
+                                </div>
+                                <div className="w-full sm:w-1/3">
+                                    <select
+                                        value={participant.role}
+                                        onChange={(e) => handleParticipantChange(index, 'role', e.target.value)}
+                                        className="w-full px-3 py-2 border rounded-md"
+                                    >
+                                        <option value="viewer">Viewer</option>
+                                        <option value="contributor">Contributor</option>
+                                    </select>
+                                </div>
+                                <button
+                                    type="button"
+                                    onClick={() => handleRemoveParticipant(index)}
+                                    className="text-red-600 hover:text-red-700 px-2 py-1 rounded-md 
+                                             hover:bg-red-50 transition-colors w-full sm:w-auto text-center"
+                                >
+                                    Remove
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Submit Button */}
+                    <div className="flex justify-end">
+                        <button
+                            type="submit"
+                            className="px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-500 
+                                    hover:from-blue-500 hover:to-blue-400 text-white rounded-lg shadow-lg 
+                                    transition-all transform hover:-translate-y-1"
+                        >
+                            Create Meeting
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     );
 }
