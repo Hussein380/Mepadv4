@@ -1,25 +1,33 @@
-# Ignore specific directories and files
-.git
-.vscode
-docs
-**/node_modules
-**/.git
-**/.vscode
-**/dist
+# Ignore everything by default
+*
 
-# Don't ignore these directories and files
-!frontend/
-!frontend/src
-!frontend/public
+# Don't ignore these specific directories and files
+!frontend/src/**
+!frontend/public/**
 !frontend/package.json
+!frontend/package-lock.json
 !frontend/vite.config.js
-!frontend/index.html
+!frontend/postcss.config.js
+!frontend/tailwind.config.js
 !frontend/.env.production
+!frontend/vercel.json
+!frontend/index.html
 
-!Backend/
-!Backend/src
+# Backend files
 !Backend/server.js
 !Backend/package.json
+!Backend/package-lock.json
+!Backend/controllers/**
+!Backend/middleware/**
+!Backend/models/**
+!Backend/routes/**
+!Backend/utils/**
 !Backend/.env.production
 
-!vercel.json 
+# Root files
+!vercel.json
+!.gitattributes
+
+# Explicitly ignore node_modules
+frontend/node_modules/**
+Backend/node_modules/** 
