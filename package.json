@@ -15,8 +15,7 @@
     "install:all": "npm install && npm run install:frontend && npm run install:backend",
     "install:frontend": "cd frontend && npm install",
     "install:backend": "cd Backend && npm install",
-    "vercel-build": "npm run build",
-    "deploy": "vercel --prod"
+    "vercel-build": "npm run build"
   },
   "engines": {
     "node": ">=18.0.0"
