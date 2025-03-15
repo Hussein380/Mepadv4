@@ -1,0 +1,25 @@
+# Ignore specific directories and files
+.git
+.vscode
+docs
+**/node_modules
+**/.git
+**/.vscode
+**/dist
+
+# Don't ignore these directories and files
+!frontend/
+!frontend/src
+!frontend/public
+!frontend/package.json
+!frontend/vite.config.js
+!frontend/index.html
+!frontend/.env.production
+
+!Backend/
+!Backend/src
+!Backend/server.js
+!Backend/package.json
+!Backend/.env.production
+
+!vercel.json 

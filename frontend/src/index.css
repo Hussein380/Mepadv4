@@ -1,0 +1,184 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom scrollbar for the chatbot */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(30, 41, 59, 0.5);
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(99, 102, 241, 0.5);
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(99, 102, 241, 0.7);
+}
+
+/* For Firefox */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(99, 102, 241, 0.5) rgba(30, 41, 59, 0.5);
+}
+
+/* Animation styles for feature guide */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(-10px); }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+.animate-fadeOut {
+  animation: fadeOut 0.3s ease-out forwards;
+}
+
+/* Markdown content styling */
+.markdown-content {
+  /* General text styling */
+  color: #f8fafc; /* text-slate-100 */
+  line-height: 1.5;
+  font-size: 0.875rem; /* Smaller base font size */
+}
+
+.markdown-content h1,
+.markdown-content h2,
+.markdown-content h3,
+.markdown-content h4,
+.markdown-content h5,
+.markdown-content h6 {
+  margin-top: 1rem;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.markdown-content h1 {
+  font-size: 1.25rem; /* Reduced from 1.5rem */
+  border-bottom: 1px solid rgba(99, 102, 241, 0.2); /* indigo-500/20 */
+  padding-bottom: 0.25rem;
+}
+
+.markdown-content h2 {
+  font-size: 1.125rem; /* Reduced from 1.25rem */
+  border-bottom: 1px solid rgba(99, 102, 241, 0.1); /* indigo-500/10 */
+  padding-bottom: 0.25rem;
+}
+
+.markdown-content h3 {
+  font-size: 1rem; /* Reduced from 1.125rem */
+}
+
+.markdown-content p {
+  margin-bottom: 0.75rem; /* Reduced from 1rem */
+}
+
+.markdown-content ul,
+.markdown-content ol {
+  margin-top: 0.25rem; /* Reduced from 0.5rem */
+  margin-bottom: 0.75rem; /* Reduced from 1rem */
+  padding-left: 1.25rem; /* Reduced from 1.5rem */
+}
+
+.markdown-content ul {
+  list-style-type: disc;
+}
+
+.markdown-content ol {
+  list-style-type: decimal;
+}
+
+.markdown-content li {
+  margin-bottom: 0.125rem; /* Reduced from 0.25rem */
+}
+
+.markdown-content a {
+  color: #a5b4fc; /* indigo-300 */
+  text-decoration: none;
+}
+
+.markdown-content a:hover {
+  text-decoration: underline;
+}
+
+.markdown-content blockquote {
+  border-left: 3px solid #6366f1; /* indigo-500, reduced from 4px */
+  padding-left: 0.75rem; /* Reduced from 1rem */
+  margin-left: 0;
+  margin-right: 0;
+  margin-top: 0.75rem; /* Reduced from 1rem */
+  margin-bottom: 0.75rem; /* Reduced from 1rem */
+  font-style: italic;
+  color: #cbd5e1; /* slate-300 */
+  font-size: 0.875rem; /* Smaller font for quotes */
+}
+
+.markdown-content pre {
+  background-color: rgba(30, 41, 59, 0.7); /* slate-800/70 */
+  border-radius: 0.375rem;
+  padding: 0.75rem; /* Reduced from 1rem */
+  margin-top: 0.75rem; /* Reduced from 1rem */
+  margin-bottom: 0.75rem; /* Reduced from 1rem */
+  overflow-x: auto;
+}
+
+.markdown-content code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.75rem; /* Reduced from 0.875rem */
+  background-color: rgba(30, 41, 59, 0.5); /* slate-800/50 */
+  padding: 0.125rem 0.25rem;
+  border-radius: 0.25rem;
+}
+
+.markdown-content pre code {
+  background-color: transparent;
+  padding: 0;
+  border-radius: 0;
+  font-size: 0.75rem; /* Reduced from 0.875rem */
+  color: #e2e8f0; /* slate-200 */
+}
+
+.markdown-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.75rem; /* Reduced from 1rem */
+  margin-bottom: 0.75rem; /* Reduced from 1rem */
+  font-size: 0.75rem; /* Smaller font for tables */
+}
+
+.markdown-content table th,
+.markdown-content table td {
+  border: 1px solid rgba(148, 163, 184, 0.2); /* slate-400/20 */
+  padding: 0.375rem; /* Reduced from 0.5rem */
+  text-align: left;
+}
+
+.markdown-content table th {
+  background-color: rgba(30, 41, 59, 0.7); /* slate-800/70 */
+  font-weight: 600;
+}
+
+.markdown-content table tr:nth-child(even) {
+  background-color: rgba(30, 41, 59, 0.3); /* slate-800/30 */
+}
+
+.markdown-content hr {
+  height: 1px;
+  background-color: rgba(148, 163, 184, 0.2); /* slate-400/20 */
+  border: none;
+  margin-top: 1rem; /* Reduced from 1.5rem */
+  margin-bottom: 1rem; /* Reduced from 1.5rem */
+} 
