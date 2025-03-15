@@ -10,7 +10,6 @@
 !frontend/postcss.config.js
 !frontend/tailwind.config.js
 !frontend/.env.production
-!frontend/vercel.json
 !frontend/index.html
 
 # Backend files
@@ -27,6 +26,7 @@
 # Root files
 !vercel.json
 !.gitattributes
+!package.json
 
 # Explicitly ignore node_modules
 frontend/node_modules/**
