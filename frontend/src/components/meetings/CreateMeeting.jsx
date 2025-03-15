@@ -31,6 +31,17 @@ export default function CreateMeeting() {
 
     const handleAddParticipant = () => {
         setParticipants([...participants, { name: '', email: '', role: 'viewer' }]);
+        
+        // Ensure the new fields are properly styled after they're added
+        setTimeout(() => {
+            const newInputs = document.querySelectorAll('.participant-row:last-child input, .participant-row:last-child select');
+            newInputs.forEach(input => {
+                input.style.color = 'white';
+                input.style.backgroundColor = '#1e293b';
+                input.style.caretColor = 'white';
+                input.style.borderColor = '#3b82f6';
+            });
+        }, 0);
     };
 
     const handleRemoveParticipant = (index) => {
@@ -166,13 +177,13 @@ export default function CreateMeeting() {
 
                     {/* Participants Section */}
                     <div className="space-y-4">
-                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                            <h3 className="text-lg font-semibold">Participants</h3>
+                        <div className="flex justify-between items-center">
+                            <h3 className="text-lg font-semibold text-blue-100">Participants</h3>
                             <button
                                 type="button"
                                 onClick={handleAddParticipant}
-                                className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 
-                                         transition-colors w-full sm:w-auto text-center whitespace-nowrap"
+                                className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg 
+                                         shadow-lg transition-all flex items-center gap-2"
                             >
                                 Add Participant
                             </button>
@@ -181,7 +192,7 @@ export default function CreateMeeting() {
                         {participants.map((participant, index) => (
                             <div 
                                 key={index} 
-                                className="flex flex-col sm:flex-row items-start sm:items-center gap-3 p-3 bg-gray-50 rounded-md"
+                                className="flex flex-col sm:flex-row items-start sm:items-center gap-3 p-3 bg-slate-800 rounded-md participant-row"
                             >
                                 <div className="w-full sm:w-1/3">
                                     <input
@@ -191,6 +202,12 @@ export default function CreateMeeting() {
                                         onChange={(e) => handleParticipantChange(index, 'name', e.target.value)}
                                         className="w-full px-3 py-2 border rounded-md"
                                         required
+                                        style={{
+                                            color: 'white',
+                                            backgroundColor: '#1e293b',
+                                            caretColor: 'white',
+                                            borderColor: '#3b82f6'
+                                        }}
                                     />
                                 </div>
                                 <div className="w-full sm:w-1/3">
@@ -201,6 +218,12 @@ export default function CreateMeeting() {
                                         onChange={(e) => handleParticipantChange(index, 'email', e.target.value)}
                                         className="w-full px-3 py-2 border rounded-md"
                                         required
+                                        style={{
+                                            color: 'white',
+                                            backgroundColor: '#1e293b',
+                                            caretColor: 'white',
+                                            borderColor: '#3b82f6'
+                                        }}
                                     />
                                 </div>
                                 <div className="w-full sm:w-1/3">
@@ -208,16 +231,21 @@ export default function CreateMeeting() {
                                         value={participant.role}
                                         onChange={(e) => handleParticipantChange(index, 'role', e.target.value)}
                                         className="w-full px-3 py-2 border rounded-md"
+                                        style={{
+                                            color: 'white',
+                                            backgroundColor: '#1e293b',
+                                            caretColor: 'white',
+                                            borderColor: '#3b82f6'
+                                        }}
                                     >
-                                        <option value="viewer">Viewer</option>
-                                        <option value="contributor">Contributor</option>
+                                        <option value="viewer" style={{ backgroundColor: '#1e293b' }}>Viewer</option>
+                                        <option value="contributor" style={{ backgroundColor: '#1e293b' }}>Contributor</option>
                                     </select>
                                 </div>
                                 <button
                                     type="button"
                                     onClick={() => handleRemoveParticipant(index)}
-                                    className="text-red-600 hover:text-red-700 px-2 py-1 rounded-md 
-                                             hover:bg-red-50 transition-colors w-full sm:w-auto text-center"
+                                    className="text-red-400 hover:text-red-300 bg-red-900/30 px-2 py-1 rounded"
                                 >
                                     Remove
                                 </button>

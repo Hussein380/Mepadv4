@@ -13,6 +13,16 @@
   border-color: #3b82f6 !important; /* Blue border for better visibility */
 }
 
+/* Participant fields styling */
+.participant-row input,
+.participant-row select,
+.participant-row option {
+  color: white !important;
+  background-color: #1e293b !important;
+  caret-color: white !important;
+  border-color: #3b82f6 !important;
+}
+
 /* Custom scrollbar for chatbot */
 .chatbot-messages::-webkit-scrollbar {
   width: 5px;
