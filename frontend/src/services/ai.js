@@ -5,6 +5,11 @@ const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 const GEMINI_API_URL = import.meta.env.VITE_GEMINI_API_URL || 'https://generativelanguage.googleapis.com/v1beta';
 const GEMINI_MODEL = import.meta.env.VITE_GEMINI_MODEL || 'models/gemini-1.5-pro';
 
+// Validate required environment variables
+if (!GEMINI_API_KEY) {
+  console.error('VITE_GEMINI_API_KEY is not set in environment variables');
+}
+
 // Create a configured axios instance for Gemini API
 const geminiApi = axios.create({
   baseURL: GEMINI_API_URL,
@@ -15,6 +20,9 @@ const geminiApi = axios.create({
 
 // Add API key to all requests
 geminiApi.interceptors.request.use(config => {
+  if (!GEMINI_API_KEY) {
+    return Promise.reject(new Error('API key not configured'));
+  }
   config.params = config.params || {};
   config.params.key = GEMINI_API_KEY;
   return config;
