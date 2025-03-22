@@ -56,6 +56,26 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
+// Root route handler
+app.get('/', (req, res) => {
+    res.json({
+        status: 'success',
+        message: 'MePad API is running',
+        environment: process.env.NODE_ENV,
+        timestamp: new Date().toISOString()
+    });
+});
+
+// Health check endpoint
+app.get('/api/health', (req, res) => {
+    res.json({
+        status: 'success',
+        message: 'API is healthy',
+        environment: process.env.NODE_ENV,
+        timestamp: new Date().toISOString()
+    });
+});
+
 // Request logging in development
 if (process.env.NODE_ENV === 'development') {
     app.use((req, res, next) => {
