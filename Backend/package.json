@@ -5,7 +5,8 @@
     "main": "server.js",
     "scripts": {
         "start": "node server.js",
-        "build": "npm install",
+        "vercel-build": "echo 'Building API'",
+        "build": "echo 'Building API'",
         "dev": "nodemon server.js",
         "check-port": "node src/scripts/checkPort.js",
         "test": "jest"
