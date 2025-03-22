@@ -107,8 +107,8 @@ export default function CreateMeeting() {
                             <label className="block text-sm font-medium mb-1 text-blue-100">Date and Time</label>
                             <input
                                 type="datetime-local"
-                                name="dateTime"
-                                value={formData.dateTime}
+                                name="date"
+                                value={formData.date}
                                 onChange={handleChange}
                                 required
                                 className="w-full px-4 py-2 rounded-lg border border-blue-700"
