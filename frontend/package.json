@@ -9,8 +9,6 @@
     "start": "vite",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "test:ai": "node src/tests/run-ai-test.js",
-    "test:gemini": "node test-ai.js",
     "vercel-build": "vite build"
   },
   "dependencies": {
