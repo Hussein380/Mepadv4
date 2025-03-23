@@ -16,7 +16,7 @@ const generateToken = (id) => {
 // @route   POST /api/auth/register
 // @access  Public
 exports.register = asyncHandler(async (req, res) => {
-    const { email, password } = req.body;
+    const { email, password, name } = req.body;
 
     // Check if user exists
     const userExists = await User.findOne({ email });
@@ -28,7 +28,8 @@ exports.register = asyncHandler(async (req, res) => {
     // Create user
     const user = await User.create({
         email,
-        password
+        password,
+        name
     });
 
     // Generate token
@@ -55,6 +56,7 @@ exports.register = asyncHandler(async (req, res) => {
         success: true,
         data: {
             _id: user._id,
+            name: user.name,
             email: user.email,
             token
         }
@@ -92,6 +94,7 @@ exports.login = asyncHandler(async (req, res) => {
         success: true,
         data: {
             _id: user._id,
+            name: user.name,
             email: user.email,
             token
         }
@@ -108,6 +111,7 @@ exports.getMe = asyncHandler(async (req, res) => {
         success: true,
         data: {
             _id: user._id,
+            name: user.name,
             email: user.email
         }
     });
