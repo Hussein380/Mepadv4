@@ -7,7 +7,8 @@ const {
     updateMeeting,
     deleteMeeting,
     updateActionPoint,
-    addActionPoint
+    addActionPoint,
+    deleteActionPoint
 } = require('../controllers/meetingController');
 
 const { protect } = require('../middleware/authMiddleware');
@@ -29,6 +30,7 @@ router.route('/:id/action-points')
     .post(protect, addActionPoint);
 
 router.route('/:id/action-points/:actionId')
-    .put(protect, updateActionPoint);
+    .put(protect, updateActionPoint)
+    .delete(protect, deleteActionPoint);
 
 module.exports = router;

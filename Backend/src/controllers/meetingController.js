@@ -434,4 +434,53 @@ exports.updateActionPoint = async (req, res) => {
             error: error.message
         });
     }
+};
+
+// Delete action point
+exports.deleteActionPoint = async (req, res) => {
+    try {
+        const meeting = await Meeting.findById(req.params.id);
+        
+        if (!meeting) {
+            return res.status(404).json({
+                success: false,
+                error: 'Meeting not found'
+            });
+        }
+
+        // Find the action point
+        const actionPoint = meeting.actionPoints.id(req.params.actionId);
+        if (!actionPoint) {
+            return res.status(404).json({
+                success: false,
+                error: 'Action point not found'
+            });
+        }
+
+        // Check if user has permission (creator or owner of action point)
+        const isCreator = meeting.createdBy.toString() === req.user._id.toString();
+        const isActionPointOwner = actionPoint.assignedTo === req.user.email;
+        
+        if (!isCreator && !isActionPointOwner) {
+            return res.status(401).json({
+                success: false,
+                error: 'Not authorized to delete this action point'
+            });
+        }
+
+        // Remove the action point
+        actionPoint.remove();
+        await meeting.save();
+
+        res.json({
+            success: true,
+            message: 'Action point deleted successfully'
+        });
+    } catch (error) {
+        console.error('Error deleting action point:', error);
+        res.status(400).json({
+            success: false,
+            error: error.message
+        });
+    }
 }; 

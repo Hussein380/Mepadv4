@@ -3,7 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { meetings } from '../../services/api';
 import { formatDate } from '../../utils/helpers';
 import { motion } from 'framer-motion';
-import { BiEdit, BiTrash, BiArrowBack, BiSave, BiX, BiPlus, BiBot } from 'react-icons/bi';
+import { BiEdit, BiTrash, BiArrowBack, BiSave, BiX, BiPlus, BiBot, BiUser, BiCalendar } from 'react-icons/bi';
 import toast from 'react-hot-toast';
 import LoadingSpinner from '../shared/LoadingSpinner';
 
@@ -14,33 +14,46 @@ export default function MeetingDetail() {
     const [editedMeeting, setEditedMeeting] = useState(null);
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
     const [showAddActionPoint, setShowAddActionPoint] = useState(false);
+    const [newActionPoint, setNewActionPoint] = useState({
+        title: '',
+        description: '',
+        assignedTo: '',
+        dueDate: '',
+        status: 'pending'
+    });
     const { id } = useParams();
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetchMeetingDetails();
+        fetchMeeting();
     }, [id]);
 
-    const fetchMeetingDetails = async () => {
+    const fetchMeeting = async () => {
         try {
             const response = await meetings.getOne(id);
-            setMeeting(response.data.data);
-            setEditedMeeting(response.data.data);
-        } catch (error) {
-            toast.error(error.displayMessage || 'Failed to fetch meeting details');
-            navigate('/meetings');
-        } finally {
+            // Check the structure of the response and handle it accordingly
+            const meetingData = response.data.data || response.data;
+            setMeeting(meetingData);
+            setEditedMeeting({
+                ...meetingData,
+                date: meetingData.date.split('T')[0]
+            });
             setLoading(false);
+        } catch (error) {
+            toast.error('Failed to fetch meeting details');
+            console.error('Error fetching meeting:', error);
+            navigate('/meetings');
         }
     };
 
-    const handleDelete = async () => {
+    const handleDeleteMeeting = async () => {
         try {
             await meetings.delete(id);
             toast.success('Meeting deleted successfully');
             navigate('/meetings');
         } catch (error) {
-            toast.error(error.displayMessage || 'Failed to delete meeting');
+            toast.error('Failed to delete meeting');
+            console.error(error);
         }
         setShowDeleteConfirm(false);
     };
@@ -55,7 +68,7 @@ export default function MeetingDetail() {
             setMeeting(editedMeeting);
             setIsEditing(false);
             toast.success('Meeting updated successfully');
-            fetchMeetingDetails();
+            fetchMeeting();
         } catch (error) {
             toast.error(error.displayMessage || 'Failed to update meeting');
         }
@@ -76,32 +89,58 @@ export default function MeetingDetail() {
 
     const handleActionPointStatusUpdate = async (actionId, newStatus) => {
         try {
-            await meetings.updateActionPoint(id, actionId, { status: newStatus });
-            toast.success('Action point updated successfully');
-            fetchMeetingDetails();
+            await meetings.updateActionPointStatus(id, actionId, newStatus);
+            toast.success('Status updated successfully');
+            fetchMeeting();
         } catch (error) {
-            toast.error('Failed to update action point');
+            toast.error('Failed to update status');
+            console.error(error);
         }
     };
 
     const handleAddActionPoint = async (e) => {
         e.preventDefault();
-        
-        const formData = new FormData(e.target);
-        const actionPoint = {
-            description: formData.get('description'),
-            assignedTo: formData.get('assignedTo'),
-            dueDate: formData.get('dueDate'),
-            status: 'pending'
-        };
-        
         try {
-            await meetings.addActionPoint(id, actionPoint);
+            const actionPointData = {
+                description: newActionPoint.description,
+                assignedTo: newActionPoint.assignedTo,
+                dueDate: newActionPoint.dueDate,
+                status: 'pending'
+            };
+            
+            // If title is provided, add it
+            if (newActionPoint.title) {
+                actionPointData.title = newActionPoint.title;
+            }
+            
+            await meetings.addActionPoint(id, actionPointData);
             toast.success('Action point added successfully');
             setShowAddActionPoint(false);
-            fetchMeetingDetails();
+            setNewActionPoint({
+                title: '',
+                description: '',
+                assignedTo: '',
+                dueDate: '',
+                status: 'pending'
+            });
+            fetchMeeting();
         } catch (error) {
-            toast.error(error.displayMessage || 'Failed to add action point');
+            toast.error('Failed to add action point');
+            console.error(error);
+        }
+    };
+
+    const handleDeleteActionPoint = async (actionId) => {
+        try {
+            console.log('Deleting action point with ID:', actionId);
+            console.log('Meeting ID:', id);
+            
+            await meetings.deleteActionPoint(id, actionId);
+            toast.success('Action point deleted successfully');
+            fetchMeeting();
+        } catch (error) {
+            console.error('Error deleting action point:', error);
+            toast.error('Failed to delete action point');
         }
     };
 
@@ -109,42 +148,46 @@ export default function MeetingDetail() {
     if (!meeting) return <div className="text-center text-white">Meeting not found</div>;
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-blue-900 to-blue-950 py-8 px-4">
+        <div className="min-h-screen bg-gradient-to-b from-blue-900 to-blue-950 py-8 px-4 overflow-x-hidden">
             <motion.div 
+                className="max-w-5xl mx-auto w-full"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="max-w-5xl mx-auto"
+                transition={{ duration: 0.5 }}
             >
-                {/* Header Section */}
-                <div className="flex justify-between items-center mb-8">
-                    <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        onClick={() => navigate('/meetings')}
-                        className="flex items-center gap-2 text-blue-300 hover:text-blue-200 transition-colors"
+                {/* Back Button */}
+                <div className="mb-6">
+                    <Link 
+                        to="/meetings" 
+                        className="inline-flex items-center gap-1 text-blue-300 hover:text-white transition-colors"
                     >
-                        <BiArrowBack />
+                        <BiArrowBack className="text-xl" />
                         <span>Back to Meetings</span>
-                    </motion.button>
+                    </Link>
+                </div>
 
-                    <div className="flex gap-3">
+                {/* Header Section */}
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+                    <h2 className="text-xl font-semibold text-white">Meeting Details</h2>
+
+                    <div className="flex flex-wrap gap-2 sm:gap-3">
                         {isEditing ? (
                             <>
                                 <motion.button
                                     whileHover={{ scale: 1.05 }}
                                     whileTap={{ scale: 0.95 }}
                                     onClick={handleSave}
-                                    className="px-4 py-2 bg-green-600 text-white rounded-lg 
+                                    className="px-3 py-1.5 sm:px-4 sm:py-2 bg-green-600 text-white text-sm rounded-lg 
                                              flex items-center gap-2 hover:bg-green-500 transition-colors"
                                 >
                                     <BiSave />
-                                    Save Changes
+                                    Save
                                 </motion.button>
                                 <motion.button
                                     whileHover={{ scale: 1.05 }}
                                     whileTap={{ scale: 0.95 }}
                                     onClick={handleCancel}
-                                    className="px-4 py-2 bg-gray-600 text-white rounded-lg 
+                                    className="px-3 py-1.5 sm:px-4 sm:py-2 bg-gray-600 text-white text-sm rounded-lg 
                                              flex items-center gap-2 hover:bg-gray-500 transition-colors"
                                 >
                                     <BiX />
@@ -155,31 +198,33 @@ export default function MeetingDetail() {
                             <>
                                 <Link
                                     to={`/ai-assistant/${id}`}
-                                    className="px-4 py-2 bg-purple-600 text-white rounded-lg 
+                                    className="px-3 py-1.5 sm:px-4 sm:py-2 bg-purple-600 text-white text-sm rounded-lg 
                                              flex items-center gap-2 hover:bg-purple-500 transition-colors"
                                 >
                                     <BiBot />
-                                    AI Assistant
+                                    <span className="hidden sm:inline">AI Assistant</span>
+                                    <span className="sm:hidden">AI</span>
                                 </Link>
                                 <motion.button
                                     whileHover={{ scale: 1.05 }}
                                     whileTap={{ scale: 0.95 }}
                                     onClick={handleEdit}
-                                    className="px-4 py-2 bg-blue-600 text-white rounded-lg 
+                                    className="px-3 py-1.5 sm:px-4 sm:py-2 bg-blue-600 text-white text-sm rounded-lg 
                                              flex items-center gap-2 hover:bg-blue-500 transition-colors"
                                 >
                                     <BiEdit />
-                                    Edit Meeting
+                                    <span className="hidden sm:inline">Edit Meeting</span>
+                                    <span className="sm:hidden">Edit</span>
                                 </motion.button>
                                 <motion.button
                                     whileHover={{ scale: 1.05 }}
                                     whileTap={{ scale: 0.95 }}
                                     onClick={() => setShowDeleteConfirm(true)}
-                                    className="px-4 py-2 bg-red-600 text-white rounded-lg 
+                                    className="px-3 py-1.5 sm:px-4 sm:py-2 bg-red-600 text-white text-sm rounded-lg 
                                              flex items-center gap-2 hover:bg-red-500 transition-colors"
                                 >
                                     <BiTrash />
-                                    Delete
+                                    <span className="hidden sm:inline">Delete</span>
                                 </motion.button>
                             </>
                         )}
@@ -188,67 +233,118 @@ export default function MeetingDetail() {
 
                 {/* Meeting Details Card */}
                 <motion.div 
-                    className="bg-white/10 backdrop-blur-lg rounded-xl p-6 shadow-xl 
-                             border border-white/10 mb-6"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                    className="bg-white/10 backdrop-blur-lg rounded-xl p-4 sm:p-6 shadow-xl 
+                             border border-white/10 mb-6 overflow-hidden"
                 >
                     {isEditing ? (
                         <div className="space-y-4">
-                            <input
-                                type="text"
-                                name="title"
-                                value={editedMeeting.title}
-                                onChange={handleInputChange}
-                                className="w-full px-4 py-2 bg-blue-800/50 border border-blue-700 
-                                         rounded-lg text-white placeholder-blue-300 focus:ring-2 
-                                         focus:ring-blue-500 focus:border-transparent"
-                            />
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <input
-                                    type="date"
-                                    name="date"
-                                    value={editedMeeting.date.split('T')[0]}
-                                    onChange={handleInputChange}
-                                    className="px-4 py-2 bg-blue-800/50 border border-blue-700 
-                                             rounded-lg text-white focus:ring-2 focus:ring-blue-500"
-                                />
+                            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4">
+                                <h1 className="text-2xl sm:text-3xl font-bold text-white">Edit Meeting</h1>
+                                <div className="flex gap-2">
+                                    <button
+                                        onClick={() => setIsEditing(false)}
+                                        className="px-3 py-1 bg-gray-700 hover:bg-gray-600 text-white text-sm rounded-md flex items-center gap-1"
+                                    >
+                                        <BiX /> Cancel
+                                    </button>
+                                    <button
+                                        onClick={handleSave}
+                                        className="px-3 py-1 bg-blue-600 hover:bg-blue-500 text-white text-sm rounded-md flex items-center gap-1"
+                                    >
+                                        <BiSave /> Save
+                                    </button>
+                                </div>
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-blue-200 mb-1">
+                                    Title
+                                </label>
                                 <input
                                     type="text"
-                                    name="venue"
-                                    value={editedMeeting.venue}
-                                    onChange={handleInputChange}
-                                    className="px-4 py-2 bg-blue-800/50 border border-blue-700 
-                                             rounded-lg text-white placeholder-blue-300 focus:ring-2"
-                                    placeholder="Venue"
+                                    value={editedMeeting.title}
+                                    onChange={(e) => setEditedMeeting({ ...editedMeeting, title: e.target.value })}
+                                    className="w-full px-3 py-2 bg-blue-800/50 border border-blue-700 rounded-md text-white"
                                 />
                             </div>
-                            <textarea
-                                name="summary"
-                                value={editedMeeting.summary}
-                                onChange={handleInputChange}
-                                className="w-full px-4 py-2 bg-blue-800/50 border border-blue-700 
-                                         rounded-lg text-white placeholder-blue-300 focus:ring-2 
-                                         focus:ring-blue-500 resize-y"
-                                rows="4"
-                            />
+                            <div>
+                                <label className="block text-sm font-medium text-blue-200 mb-1">
+                                    Description
+                                </label>
+                                <textarea
+                                    value={editedMeeting.description}
+                                    onChange={(e) => setEditedMeeting({ ...editedMeeting, description: e.target.value })}
+                                    className="w-full px-3 py-2 bg-blue-800/50 border border-blue-700 rounded-md text-white min-h-[100px]"
+                                />
+                            </div>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-sm font-medium text-blue-200 mb-1">
+                                        Date
+                                    </label>
+                                    <input
+                                        type="date"
+                                        value={editedMeeting.date}
+                                        onChange={(e) => setEditedMeeting({ ...editedMeeting, date: e.target.value })}
+                                        className="w-full px-3 py-2 bg-blue-800/50 border border-blue-700 rounded-md text-white appearance-none"
+                                        style={{ colorScheme: 'dark' }}
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-blue-200 mb-1">
+                                        Time
+                                    </label>
+                                    <input
+                                        type="time"
+                                        value={editedMeeting.time}
+                                        onChange={(e) => setEditedMeeting({ ...editedMeeting, time: e.target.value })}
+                                        className="w-full px-3 py-2 bg-blue-800/50 border border-blue-700 rounded-md text-white appearance-none"
+                                        style={{ colorScheme: 'dark' }}
+                                    />
+                                </div>
+                            </div>
                         </div>
                     ) : (
-                        <div className="space-y-4">
-                            <h1 className="text-2xl font-bold text-white">{meeting.title}</h1>
-                            <div className="grid grid-cols-2 gap-4 text-blue-200">
-                                <p>Date: {formatDate(meeting.date)}</p>
-                                <p>Venue: {meeting.venue}</p>
+                        <>
+                            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-6">
+                                <div>
+                                    <h1 className="text-2xl sm:text-3xl font-bold text-white">{meeting.title}</h1>
+                                    <p className="text-blue-300 mt-1">
+                                        {new Date(meeting.date).toLocaleDateString()} at {meeting.time}
+                                    </p>
+                                </div>
+                                <div className="flex flex-wrap gap-2">
+                                    <button
+                                        onClick={() => setIsEditing(true)}
+                                        className="px-3 py-1 bg-blue-600 hover:bg-blue-500 text-white text-sm rounded-md flex items-center gap-1"
+                                    >
+                                        <BiEdit /> <span className="hidden sm:inline">Edit</span>
+                                    </button>
+                                    <button
+                                        onClick={() => setShowDeleteConfirm(true)}
+                                        className="px-3 py-1 bg-red-600 hover:bg-red-500 text-white text-sm rounded-md flex items-center gap-1"
+                                    >
+                                        <BiTrash /> <span className="hidden sm:inline">Delete</span>
+                                    </button>
+                                </div>
                             </div>
-                            <p className="text-blue-100">{meeting.summary}</p>
-                        </div>
+
+                            <div className="bg-blue-900/30 rounded-lg p-4 mb-6">
+                                <h2 className="text-xl font-semibold text-white mb-2">Description</h2>
+                                <p className="text-blue-200 whitespace-pre-wrap">{meeting.description}</p>
+                            </div>
+                        </>
                     )}
                 </motion.div>
 
                 {/* Participants Section */}
                 <motion.div 
-                    className="bg-white/10 backdrop-blur-lg rounded-xl p-6 shadow-xl 
+                    className="bg-white/10 backdrop-blur-lg rounded-xl p-4 sm:p-6 shadow-xl 
                              border border-white/10 mb-6"
                 >
-                    <div className="flex justify-between items-center mb-4">
+                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2">
                         <h2 className="text-xl font-semibold text-white">Participants</h2>
                         {isEditing && (
                             <button
@@ -262,7 +358,7 @@ export default function MeetingDetail() {
                                         ]
                                     });
                                 }}
-                                className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-md flex items-center gap-1"
+                                className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-md flex items-center gap-1 text-sm"
                             >
                                 <BiPlus /> Add Participant
                             </button>
@@ -285,7 +381,7 @@ export default function MeetingDetail() {
                                             });
                                         }}
                                         placeholder="Name"
-                                        className="flex-1 px-3 py-1 bg-blue-800/50 border border-blue-700 rounded-md text-white"
+                                        className="flex-1 px-3 py-1 bg-blue-800/50 border border-blue-700 rounded-md text-white text-sm"
                                     />
                                     <input
                                         type="email"
@@ -299,7 +395,7 @@ export default function MeetingDetail() {
                                             });
                                         }}
                                         placeholder="Email"
-                                        className="flex-1 px-3 py-1 bg-blue-800/50 border border-blue-700 rounded-md text-white"
+                                        className="flex-1 px-3 py-1 bg-blue-800/50 border border-blue-700 rounded-md text-white text-sm"
                                     />
                                     <select
                                         value={participant.role}
@@ -311,7 +407,7 @@ export default function MeetingDetail() {
                                                 participants: updatedParticipants
                                             });
                                         }}
-                                        className="px-3 py-1 bg-blue-800/50 border border-blue-700 rounded-md text-white"
+                                        className="px-3 py-1 bg-blue-800/50 border border-blue-700 rounded-md text-white text-sm"
                                     >
                                         <option value="viewer">Viewer</option>
                                         <option value="contributor">Contributor</option>
@@ -334,12 +430,12 @@ export default function MeetingDetail() {
                             ))}
                         </div>
                     ) : (
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div className="grid grid-cols-1 gap-3">
                             {meeting.participants.map((participant, index) => (
-                                <div key={index} className="flex items-center gap-2 p-2 bg-blue-800/30 rounded-lg">
+                                <div key={index} className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 p-2 bg-blue-800/30 rounded-lg">
                                     <div className="flex-1">
                                         <p className="text-white font-medium">{participant.name}</p>
-                                        <p className="text-blue-300 text-sm">{participant.email}</p>
+                                        <p className="text-blue-300 text-sm truncate">{participant.email}</p>
                                     </div>
                                     <span className="px-2 py-1 bg-blue-700/50 text-xs text-blue-200 rounded-full">
                                         {participant.role}
@@ -352,156 +448,175 @@ export default function MeetingDetail() {
 
                 {/* Action Points Section */}
                 <motion.div 
-                    className="bg-white/10 backdrop-blur-lg rounded-xl p-6 shadow-xl 
+                    className="bg-white/10 backdrop-blur-lg rounded-xl p-4 sm:p-6 shadow-xl 
                              border border-white/10 mb-6"
                 >
-                    <div className="flex justify-between items-center mb-4">
+                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-2">
                         <h2 className="text-xl font-semibold text-white">Action Points</h2>
-                        <motion.button
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
+                        <button
+                            type="button"
                             onClick={() => setShowAddActionPoint(true)}
-                            className="px-4 py-2 bg-blue-600 text-white rounded-lg 
-                                     flex items-center gap-2 hover:bg-blue-500 transition-colors"
+                            className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 
+                                      rounded-md flex items-center gap-1 text-sm"
                         >
-                            Add Action Point
-                        </motion.button>
+                            <BiPlus /> Add Action Point
+                        </button>
                     </div>
                     
-                    <div className="space-y-4">
-                        {meeting.actionPoints?.map((action) => (
-                            <motion.div
-                                key={action._id}
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                className="p-4 bg-blue-800/30 rounded-lg border border-blue-700/50"
-                            >
-                                <div className="flex justify-between items-start">
-                                    <div className="space-y-2">
-                                        <p className="font-medium text-white">{action.description}</p>
-                                        <p className="text-sm text-blue-200">
-                                            Assigned to: {action.assignedTo}
-                                        </p>
-                                        <p className="text-sm text-blue-200">
-                                            Due: {formatDate(action.dueDate)}
-                                        </p>
+                    {meeting.actionPoints && meeting.actionPoints.length > 0 ? (
+                        <div className="space-y-4">
+                            {meeting.actionPoints.map((actionPoint, index) => (
+                                <div 
+                                    key={index} 
+                                    className="bg-blue-800/30 rounded-lg p-3 border border-blue-700/30"
+                                >
+                                    <div className="flex flex-col sm:flex-row justify-between gap-2 mb-2">
+                                        <h3 className="text-white font-medium">
+                                            {actionPoint.title || actionPoint.description.substring(0, 50)}
+                                        </h3>
+                                        <div className="flex flex-wrap gap-2">
+                                            <select
+                                                value={actionPoint.status}
+                                                onChange={(e) => handleActionPointStatusUpdate(actionPoint._id, e.target.value)}
+                                                className="bg-blue-800/50 border border-blue-700 rounded-md 
+                                                         text-white text-sm px-2 py-1 w-full sm:w-auto"
+                                            >
+                                                <option value="pending">Pending</option>
+                                                <option value="in-progress">In Progress</option>
+                                                <option value="completed">Completed</option>
+                                            </select>
+                                            <button
+                                                onClick={() => handleDeleteActionPoint(actionPoint._id)}
+                                                className="text-red-400 hover:text-red-300 bg-red-900/20 hover:bg-red-900/30 
+                                                         px-2 py-1 rounded text-sm flex items-center gap-1"
+                                            >
+                                                <BiTrash />
+                                                <span className="hidden sm:inline">Delete</span>
+                                            </button>
+                                        </div>
                                     </div>
-                                    <select
-                                        value={action.status}
-                                        onChange={(e) => handleActionPointStatusUpdate(action._id, e.target.value)}
-                                        className="px-3 py-1 bg-blue-900/50 border border-blue-700 
-                                                 rounded-lg text-white focus:ring-2 focus:ring-blue-500"
-                                    >
-                                        <option value="pending">Pending</option>
-                                        <option value="completed">Completed</option>
-                                    </select>
+                                    <p className="text-blue-200 text-sm mb-1">{actionPoint.description}</p>
+                                    <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-blue-300">
+                                        <div className="flex items-center gap-1">
+                                            <BiUser />
+                                            <span>{actionPoint.assignedTo}</span>
+                                        </div>
+                                        <div className="flex items-center gap-1">
+                                            <BiCalendar />
+                                            <span>{new Date(actionPoint.dueDate).toLocaleDateString()}</span>
+                                        </div>
+                                    </div>
                                 </div>
-                            </motion.div>
-                        ))}
-                    </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="text-center py-6">
+                            <p className="text-blue-300">No action points added yet</p>
+                        </div>
+                    )}
                 </motion.div>
 
                 {/* Add Action Point Modal */}
                 {showAddActionPoint && (
-                    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-                        <motion.div 
-                            initial={{ scale: 0.9, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            className="bg-white/10 backdrop-blur-lg p-4 sm:p-6 rounded-xl shadow-xl 
-                                     border border-white/10 w-full max-w-md"
-                        >
-                            <h3 className="text-lg sm:text-xl font-semibold text-white mb-4">Add Action Point</h3>
+                    <div className="fixed inset-0 bg-slate-800/90 flex items-center justify-center p-4 z-50">
+                        <div className="bg-gradient-to-b from-blue-900 to-blue-950 border border-blue-700/50 
+                                      rounded-lg p-4 sm:p-6 max-w-md w-full shadow-xl">
+                            <div className="flex justify-between items-center mb-4">
+                                <h3 className="text-lg sm:text-xl font-semibold text-white">Add Action Point</h3>
+                                <button 
+                                    onClick={() => setShowAddActionPoint(false)}
+                                    className="text-blue-300 hover:text-white"
+                                >
+                                    <BiX size={24} />
+                                </button>
+                            </div>
                             <form onSubmit={handleAddActionPoint} className="space-y-4">
                                 <div>
-                                    <label className="block text-sm font-medium text-blue-200 mb-1">
-                                        Description
-                                    </label>
+                                    <label htmlFor="title" className="block text-sm font-medium text-blue-200 mb-1">Title</label>
                                     <input
                                         type="text"
-                                        name="description"
-                                        className="w-full px-3 py-2 bg-blue-800/50 border border-blue-700 
-                                                 rounded-lg text-white text-sm"
+                                        id="title"
+                                        value={newActionPoint.title}
+                                        onChange={(e) => setNewActionPoint({ ...newActionPoint, title: e.target.value })}
+                                        className="w-full px-3 py-2 bg-blue-800/50 border border-blue-700 rounded-md text-white"
                                         required
-                                        placeholder="Enter description"
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-blue-200 mb-1">
-                                        Assigned To
-                                    </label>
+                                    <label htmlFor="description" className="block text-sm font-medium text-blue-200 mb-1">Description</label>
+                                    <textarea
+                                        id="description"
+                                        value={newActionPoint.description}
+                                        onChange={(e) => setNewActionPoint({ ...newActionPoint, description: e.target.value })}
+                                        className="w-full px-3 py-2 bg-blue-800/50 border border-blue-700 rounded-md text-white min-h-[80px]"
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <label htmlFor="assignedTo" className="block text-sm font-medium text-blue-200 mb-1">Assigned To</label>
                                     <input
-                                        type="email"
-                                        name="assignedTo"
-                                        className="w-full px-3 py-2 bg-blue-800/50 border border-blue-700 
-                                                 rounded-lg text-white text-sm"
+                                        type="text"
+                                        id="assignedTo"
+                                        value={newActionPoint.assignedTo}
+                                        onChange={(e) => setNewActionPoint({ ...newActionPoint, assignedTo: e.target.value })}
+                                        className="w-full px-3 py-2 bg-blue-800/50 border border-blue-700 rounded-md text-white"
                                         required
-                                        placeholder="Enter email address"
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-blue-200 mb-1">
-                                        Due Date
-                                    </label>
+                                    <label htmlFor="dueDate" className="block text-sm font-medium text-blue-200 mb-1">Due Date</label>
                                     <input
                                         type="date"
-                                        name="dueDate"
-                                        className="w-full px-3 py-2 bg-blue-800/50 border border-blue-700 
-                                                 rounded-lg text-white text-sm"
+                                        id="dueDate"
+                                        value={newActionPoint.dueDate}
+                                        onChange={(e) => setNewActionPoint({ ...newActionPoint, dueDate: e.target.value })}
+                                        className="w-full px-3 py-2 bg-blue-800/50 border border-blue-700 rounded-md text-white appearance-none"
+                                        style={{ colorScheme: 'dark' }}
                                         required
                                     />
                                 </div>
-                                <div className="flex justify-end gap-2 sm:gap-3 mt-4 sm:mt-6">
+                                <div className="flex flex-col sm:flex-row gap-3 pt-2">
                                     <button
                                         type="button"
                                         onClick={() => setShowAddActionPoint(false)}
-                                        className="px-3 sm:px-4 py-2 bg-gray-600 text-white text-sm rounded-lg hover:bg-gray-500"
+                                        className="w-full sm:w-1/2 px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-md"
                                     >
                                         Cancel
                                     </button>
                                     <button
                                         type="submit"
-                                        className="px-3 sm:px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-500"
+                                        className="w-full sm:w-1/2 px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-md"
                                     >
-                                        Add
+                                        Add Action Point
                                     </button>
                                 </div>
                             </form>
-                        </motion.div>
+                        </div>
                     </div>
                 )}
 
                 {/* Delete Confirmation Modal */}
                 {showDeleteConfirm && (
-                    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
-                        <motion.div 
-                            initial={{ scale: 0.9, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            className="bg-white/10 backdrop-blur-lg p-6 rounded-xl shadow-xl 
-                                     border border-white/10 max-w-md w-full mx-4"
-                        >
-                            <h3 className="text-xl font-semibold text-white mb-4">Confirm Delete</h3>
-                            <p className="text-blue-200 mb-6">
-                                Are you sure you want to delete this meeting? This action cannot be undone.
-                            </p>
-                            <div className="flex justify-end gap-3">
-                                <motion.button
-                                    whileHover={{ scale: 1.05 }}
-                                    whileTap={{ scale: 0.95 }}
+                    <div className="fixed inset-0 bg-slate-800/90 flex items-center justify-center p-4 z-50">
+                        <div className="bg-gradient-to-b from-blue-900 to-blue-950 border border-blue-700/50 
+                                      rounded-lg p-4 sm:p-6 max-w-md w-full shadow-xl">
+                            <h3 className="text-lg sm:text-xl font-semibold text-white mb-4">Confirm Delete</h3>
+                            <p className="text-blue-200 mb-6">Are you sure you want to delete this meeting? This action cannot be undone.</p>
+                            <div className="flex flex-col sm:flex-row gap-3">
+                                <button
                                     onClick={() => setShowDeleteConfirm(false)}
-                                    className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-500"
+                                    className="w-full sm:w-1/2 px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-md"
                                 >
                                     Cancel
-                                </motion.button>
-                                <motion.button
-                                    whileHover={{ scale: 1.05 }}
-                                    whileTap={{ scale: 0.95 }}
-                                    onClick={handleDelete}
-                                    className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-500"
+                                </button>
+                                <button
+                                    onClick={handleDeleteMeeting}
+                                    className="w-full sm:w-1/2 px-4 py-2 bg-red-600 hover:bg-red-500 text-white rounded-md"
                                 >
                                     Delete
-                                </motion.button>
+                                </button>
                             </div>
-                        </motion.div>
+                        </div>
                     </div>
                 )}
             </motion.div>
