@@ -6,7 +6,8 @@ const {
     getMeeting,
     updateMeeting,
     deleteMeeting,
-    updateActionPoint
+    updateActionPoint,
+    addActionPoint
 } = require('../controllers/meetingController');
 
 const { protect } = require('../middleware/authMiddleware');
@@ -23,6 +24,9 @@ router.route('/:id')
     .get(protect, getMeeting)
     .put(protect, updateMeeting)
     .delete(protect, deleteMeeting);
+
+router.route('/:id/action-points')
+    .post(protect, addActionPoint);
 
 router.route('/:id/action-points/:actionId')
     .put(protect, updateActionPoint);
