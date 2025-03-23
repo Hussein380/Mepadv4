@@ -6,6 +6,11 @@ require('dotenv').config();
 
 const app = express();
 
+// Log environment variables for debugging
+console.log('Environment:', process.env.NODE_ENV);
+console.log('CORS_ORIGIN:', process.env.CORS_ORIGIN);
+console.log('FRONTEND_URL:', process.env.FRONTEND_URL);
+
 // Connect to database
 connectDB();
 
@@ -16,7 +21,8 @@ const allowedOrigins = [
     'http://localhost:3002',
     'http://localhost:3003',
     'http://localhost:5173',
-    'http://localhost:8080'
+    'http://localhost:8080',
+    'https://mepadv4-frontend.vercel.app'
 ];
 
 // Add the frontend URL from environment variable if it exists
@@ -35,10 +41,20 @@ if (process.env.CORS_ORIGIN) {
     });
 }
 
+// Log allowed origins for debugging
+console.log('Allowed Origins:', allowedOrigins);
+
 const corsOptions = {
     origin: function (origin, callback) {
         // Allow requests with no origin (like mobile apps, curl requests)
         if (!origin) return callback(null, true);
+        
+        console.log('Request origin:', origin);
+        
+        // Always allow the production frontend
+        if (origin === 'https://mepadv4-frontend.vercel.app') {
+            return callback(null, true);
+        }
         
         if (allowedOrigins.indexOf(origin) !== -1 || process.env.NODE_ENV === 'development') {
             callback(null, true);
