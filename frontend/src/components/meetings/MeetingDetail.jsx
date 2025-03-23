@@ -403,14 +403,14 @@ export default function MeetingDetail() {
 
                 {/* Add Action Point Modal */}
                 {showAddActionPoint && (
-                    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+                    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
                         <motion.div 
                             initial={{ scale: 0.9, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
-                            className="bg-white/10 backdrop-blur-lg p-6 rounded-xl shadow-xl 
-                                     border border-white/10 max-w-md w-full mx-4"
+                            className="bg-white/10 backdrop-blur-lg p-4 sm:p-6 rounded-xl shadow-xl 
+                                     border border-white/10 w-full max-w-md"
                         >
-                            <h3 className="text-xl font-semibold text-white mb-4">Add Action Point</h3>
+                            <h3 className="text-lg sm:text-xl font-semibold text-white mb-4">Add Action Point</h3>
                             <form onSubmit={handleAddActionPoint} className="space-y-4">
                                 <div>
                                     <label className="block text-sm font-medium text-blue-200 mb-1">
@@ -420,8 +420,9 @@ export default function MeetingDetail() {
                                         type="text"
                                         name="description"
                                         className="w-full px-3 py-2 bg-blue-800/50 border border-blue-700 
-                                                 rounded-lg text-white"
+                                                 rounded-lg text-white text-sm"
                                         required
+                                        placeholder="Enter description"
                                     />
                                 </div>
                                 <div>
@@ -429,11 +430,12 @@ export default function MeetingDetail() {
                                         Assigned To
                                     </label>
                                     <input
-                                        type="text"
+                                        type="email"
                                         name="assignedTo"
                                         className="w-full px-3 py-2 bg-blue-800/50 border border-blue-700 
-                                                 rounded-lg text-white"
+                                                 rounded-lg text-white text-sm"
                                         required
+                                        placeholder="Enter email address"
                                     />
                                 </div>
                                 <div>
@@ -444,21 +446,21 @@ export default function MeetingDetail() {
                                         type="date"
                                         name="dueDate"
                                         className="w-full px-3 py-2 bg-blue-800/50 border border-blue-700 
-                                                 rounded-lg text-white"
+                                                 rounded-lg text-white text-sm"
                                         required
                                     />
                                 </div>
-                                <div className="flex justify-end gap-3 mt-6">
+                                <div className="flex justify-end gap-2 sm:gap-3 mt-4 sm:mt-6">
                                     <button
                                         type="button"
                                         onClick={() => setShowAddActionPoint(false)}
-                                        className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-500"
+                                        className="px-3 sm:px-4 py-2 bg-gray-600 text-white text-sm rounded-lg hover:bg-gray-500"
                                     >
                                         Cancel
                                     </button>
                                     <button
                                         type="submit"
-                                        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500"
+                                        className="px-3 sm:px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-500"
                                     >
                                         Add
                                     </button>
