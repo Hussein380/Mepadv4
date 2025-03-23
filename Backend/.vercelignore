@@ -1,0 +1,25 @@
+# Dependency directories
+node_modules/
+.git/
+.github/
+
+# Test files
+tests/
+__tests__/
+*.test.js
+*.spec.js
+
+# Development files
+.vscode/
+*.log
+.env
+.env.local
+.env.development
+# Note: .env.production is NOT ignored as Vercel needs it
+
+# Documentation
+*.md
+docs/
+
+# Others
+.DS_Store 
