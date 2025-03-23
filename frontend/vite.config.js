@@ -36,5 +36,9 @@ export default defineConfig({
         }
       }
     }
+  },
+  // This helps with MIME type issues
+  optimizeDeps: {
+    include: ['react', 'react-dom', 'react-router-dom']
   }
 })
