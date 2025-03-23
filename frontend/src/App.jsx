@@ -14,6 +14,7 @@ import PrivateRoute from './components/auth/PrivateRoute';
 import ErrorBoundary from './components/shared/ErrorBoundary';
 import AIAssistantPage from './pages/AIAssistantPage';
 import AIChatbotPage from './pages/AIChatbotPage';
+import Profile from './components/profile/Profile';
 
 const router = createBrowserRouter([
     {
@@ -77,6 +78,10 @@ const router = createBrowserRouter([
                     {
                         path: "/ai-chatbot",
                         element: <AIChatbotPage />
+                    },
+                    {
+                        path: "/profile",
+                        element: <Profile />
                     }
                 ]
             }

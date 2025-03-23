@@ -46,7 +46,8 @@ api.interceptors.response.use(
 export const auth = {
     login: (credentials) => api.post('/auth/login', credentials),
     register: (userData) => api.post('/auth/register', userData),
-    getMe: () => api.get('/auth/me')
+    getMe: () => api.get('/auth/me'),
+    updateProfile: (data) => api.put('/auth/profile', data)
 };
 
 export const meetings = {

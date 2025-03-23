@@ -50,8 +50,29 @@ export function AuthProvider({ children }) {
         setUser(null);
     };
 
+    const updateProfile = async (profileData) => {
+        try {
+            const response = await auth.updateProfile(profileData);
+            setUser(response.data.data);
+            toast.success('Profile updated successfully!');
+            return response.data.data;
+        } catch (error) {
+            toast.error(error.displayMessage || 'Failed to update profile');
+            throw error;
+        }
+    };
+
+    const value = {
+        user,
+        loading,
+        login,
+        register,
+        logout,
+        updateProfile
+    };
+
     return (
-        <AuthContext.Provider value={{ user, login, register, logout, loading }}>
+        <AuthContext.Provider value={value}>
             {children}
         </AuthContext.Provider>
     );

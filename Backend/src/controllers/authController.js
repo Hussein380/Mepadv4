@@ -113,6 +113,35 @@ exports.getMe = asyncHandler(async (req, res) => {
     });
 });
 
+// @desc    Update user profile
+// @route   PUT /api/auth/profile
+// @access  Private
+exports.updateProfile = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.user.id);
+
+    if (!user) {
+        res.status(404);
+        throw new Error('User not found');
+    }
+
+    // Only allow updating certain fields
+    const { name } = req.body;
+    
+    if (name) user.name = name;
+    
+    // Save the updated user
+    await user.save();
+
+    res.status(200).json({
+        success: true,
+        data: {
+            _id: user._id,
+            name: user.name,
+            email: user.email
+        }
+    });
+});
+
 // Helper function to get admin dashboard data
 const getAdminDashboardData = async (userId) => {
     const upcomingMeetings = await Meeting.find({
