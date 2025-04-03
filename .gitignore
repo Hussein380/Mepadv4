@@ -17,10 +17,17 @@ coverage
 # Environment files
 .env
 .env.*
+.env.production
+**/\.env.production
 !.env.example
 **/.env
 **/.env.*
 !**/.env.example
+
+# Specific environment files that must be excluded
+/Backend/.env.production
+/frontend/.env.production
+/.env.production
 
 # Debug
 npm-debug.log*

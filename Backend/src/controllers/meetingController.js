@@ -468,8 +468,8 @@ exports.deleteActionPoint = async (req, res) => {
             });
         }
 
-        // Remove the action point
-        actionPoint.remove();
+        // Remove the action point using pull method instead of deprecated remove()
+        meeting.actionPoints.pull(req.params.actionId);
         await meeting.save();
 
         res.json({

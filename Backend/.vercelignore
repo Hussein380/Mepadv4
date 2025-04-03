@@ -15,7 +15,8 @@ __tests__/
 .env
 .env.local
 .env.development
-# Note: .env.production is NOT ignored as Vercel needs it
+.env.production
+# Environment files should be configured via Vercel dashboard instead
 
 # Documentation
 *.md

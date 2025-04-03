@@ -9,7 +9,6 @@
 !frontend/vite.config.js
 !frontend/postcss.config.js
 !frontend/tailwind.config.js
-!frontend/.env.production
 !frontend/index.html
 
 # Backend files
@@ -21,7 +20,6 @@
 !Backend/models/**
 !Backend/routes/**
 !Backend/utils/**
-!Backend/.env.production
 
 # Root files
 !vercel.json

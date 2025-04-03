@@ -34,9 +34,19 @@ export default function MeetingDetail() {
             // Check the structure of the response and handle it accordingly
             const meetingData = response.data.data || response.data;
             setMeeting(meetingData);
+            
+            // Extract time from date or set a default time if not available
+            const meetingDate = new Date(meetingData.date);
+            const hours = meetingDate.getHours().toString().padStart(2, '0');
+            const minutes = meetingDate.getMinutes().toString().padStart(2, '0');
+            const timeString = `${hours}:${minutes}`;
+            
             setEditedMeeting({
                 ...meetingData,
-                date: meetingData.date.split('T')[0]
+                date: meetingData.date.split('T')[0],
+                time: timeString,
+                // Make sure description is set correctly (could be summary in the backend)
+                description: meetingData.description || meetingData.summary || ''
             });
             setLoading(false);
         } catch (error) {
@@ -64,8 +74,24 @@ export default function MeetingDetail() {
 
     const handleSave = async () => {
         try {
-            await meetings.update(id, editedMeeting);
-            setMeeting(editedMeeting);
+            // Create a copy of the editedMeeting object for submission
+            const meetingToUpdate = { ...editedMeeting };
+            
+            // If description exists but summary doesn't, map description to summary
+            if (meetingToUpdate.description && !meetingToUpdate.summary) {
+                meetingToUpdate.summary = meetingToUpdate.description;
+            }
+            
+            // Format date with time if both exist
+            if (meetingToUpdate.date && meetingToUpdate.time) {
+                const [year, month, day] = meetingToUpdate.date.split('-');
+                const [hours, minutes] = meetingToUpdate.time.split(':');
+                const dateObj = new Date(year, month - 1, day, hours, minutes);
+                meetingToUpdate.date = dateObj.toISOString();
+            }
+            
+            await meetings.update(id, meetingToUpdate);
+            setMeeting({...meetingToUpdate});
             setIsEditing(false);
             toast.success('Meeting updated successfully');
             fetchMeeting();
@@ -312,7 +338,10 @@ export default function MeetingDetail() {
                                 <div>
                                     <h1 className="text-2xl sm:text-3xl font-bold text-white">{meeting.title}</h1>
                                     <p className="text-blue-300 mt-1">
-                                        {new Date(meeting.date).toLocaleDateString()} at {meeting.time}
+                                        {new Date(meeting.date).toLocaleDateString()} at {meeting.time || (() => {
+                                            const date = new Date(meeting.date);
+                                            return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                                        })()}
                                     </p>
                                 </div>
                                 <div className="flex flex-wrap gap-2">
@@ -333,7 +362,7 @@ export default function MeetingDetail() {
 
                             <div className="bg-blue-900/30 rounded-lg p-4 mb-6">
                                 <h2 className="text-xl font-semibold text-white mb-2">Description</h2>
-                                <p className="text-blue-200 whitespace-pre-wrap">{meeting.description}</p>
+                                <p className="text-blue-200 whitespace-pre-wrap">{meeting.description || meeting.summary}</p>
                             </div>
                         </>
                     )}

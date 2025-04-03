@@ -69,6 +69,39 @@ Create a `.env` file with the following variables:
 GEMINI_API_KEY=your_gemini_api_key
 ```
 
+## Environment Variables Security
+
+### Important Security Notice
+
+This project uses environment variables to store sensitive information such as API keys, database credentials, and secrets.
+
+**DO NOT commit any .env.production files to version control!**
+
+### Environment Files
+
+- `.env`: Local development variables
+- `.env.production`: Production variables (not tracked in git)
+- `.env.example`: Example template with placeholder values (safe to commit)
+
+### Setting up Environment Variables
+
+1. Copy the `.env.example` file to create your own `.env` file:
+   ```bash
+   cp .env.example .env
+   ```
+
+2. Edit the `.env` file with your actual values
+
+### For Production Deployment
+
+For production deployment on Vercel:
+
+1. Set up environment variables directly in the Vercel dashboard
+2. Do not include actual `.env.production` files in your commits
+3. If you need to create an `.env.production` file locally, ensure it's only for local testing
+
+Remember that environment files with real credentials should never be committed to the repository. Always use the secure environment variable features of your deployment platform (Vercel, AWS, etc.).
+
 ## License
 
 [MIT License](LICENSE)

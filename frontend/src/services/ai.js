@@ -349,7 +349,6 @@ export const analyzeMeetingSentiment = async (meetingTranscript) => {
 
 // Export configuration for testing
 export const config = {
-  GEMINI_API_KEY,
   GEMINI_API_URL,
   GEMINI_MODEL
 };
@@ -359,6 +358,5 @@ export default {
   summarizeMeeting,
   extractActionItems,
   generateAgenda,
-  analyzeMeetingSentiment,
-  GEMINI_API_KEY // Expose API key for testing
+  analyzeMeetingSentiment
 }; 
